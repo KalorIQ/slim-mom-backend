@@ -2,11 +2,14 @@ import express from 'express';
 import pinoHttp from 'pino-http';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import express from 'express';
+import NodeJS from 'node:process';
 
 export function setupServer() {
   dotenv.config();
-  const PORT = process.env.PORT;
+
+  var process = NodeJS.Process;
+  const PORT = Number(process.env['PORT']);
+  const app = express();
 
   app.use(cors());
 
