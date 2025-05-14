@@ -1,0 +1,21 @@
+{
+  "name": "slim-mom-backend",
+  "version": "1.0.0",
+  "description": "fullstack-final-hw",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KalorIQ/slim-mom-backend.git"
+  },
+  "keywords": [],
+  "author": "Vahide Segah <vahidesegah@gmail.com>",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/KalorIQ/slim-mom-backend/issues"
+  },
+  "homepage": "https://github.com/KalorIQ/slim-mom-backend#readme"
+}
