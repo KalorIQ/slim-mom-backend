@@ -2,11 +2,11 @@ import express from 'express';
 import pinoHttp from 'pino-http';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import express from 'express';
 
 export function setupServer() {
   dotenv.config();
-  const PORT = process.env.PORT; // process neden tanımlı değil anlamadım tanımladım ama düzeltemedim
-  const app = express();
+  const PORT = process.env.PORT;
 
   app.use(cors());
 
