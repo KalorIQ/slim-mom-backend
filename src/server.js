@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 export function setupServer() {
   dotenv.config();
-  const PORT = process.env.PORT;
+  const PORT = process.env.PORT; // process neden tanımlı değil anlamadım tanımladım ama düzeltemedim
   const app = express();
 
   app.use(cors());
