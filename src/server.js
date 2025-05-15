@@ -1,31 +1,28 @@
 import express from 'express';
-import pinoHttp from 'pino-http';
+import pino from 'pino-http';
 import cors from 'cors';
-import dotenv from 'dotenv';
 
+import { env } from './utils/env.js';
 
-export function setupServer() {
-  dotenv.config();
+const PORT = Number(env('PORT', '3000'));
 
-  const PORT = Number(process.env['PORT']);
+export const startServer = () => {
   const app = express();
 
+  app.use(express.json());
   app.use(cors());
 
-  app.use(express.json());
-
   app.use(
-    pinoHttp({
+    pino({
       transport: {
         target: 'pino-pretty',
       },
     }),
   );
 
-
   app.get('/', (req, res) => {
     res.json({
-      message: 'Hello world!',
+      message: 'Hello from KalorIQ!',
     });
   });
 
@@ -38,10 +35,11 @@ export function setupServer() {
   app.use((err, req, res, next) => {
     res.status(500).json({
       message: 'Something went wrong',
+      error: err.message,
     });
   });
 
   app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
   });
-}
+};
