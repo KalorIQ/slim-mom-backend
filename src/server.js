@@ -2,12 +2,11 @@ import express from 'express';
 import pinoHttp from 'pino-http';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import NodeJS from 'node:process';
+
 
 export function setupServer() {
   dotenv.config();
 
-  var process = NodeJS.Process;
   const PORT = Number(process.env['PORT']);
   const app = express();
 
@@ -22,6 +21,13 @@ export function setupServer() {
       },
     }),
   );
+
+  app.use((err, req, res, next) => {
+    res.status(500).json({
+      message: 'Something went wrong',
+    });
+  });
+
 
   app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
