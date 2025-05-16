@@ -15,7 +15,6 @@ import { sendMail } from '../utils/sendMail.js';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import handlebars from 'handlebars';
-import { url } from 'inspector';
 
 const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
 
