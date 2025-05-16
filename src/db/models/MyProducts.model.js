@@ -16,10 +16,10 @@ const myProductSchema = new mongoose.Schema({
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true, //  Test için required=false yaptık, sonra true'ya alabiliriz.
+    required: true,
     ref: 'user',
   },
 });
 
-const MyProducts = mongoose.model('myproducts', myProductSchema);
+const MyProducts = mongoose.model('MyProducts', myProductSchema);
 export { MyProducts };
