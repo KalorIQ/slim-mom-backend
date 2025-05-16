@@ -9,7 +9,7 @@ import {
 } from '../controllers/auth.js';
 import { loginUserSchema } from '../validation/auth.js';
 import { logoutUser } from '../controllers/auth.js';
-import { authenticate } from '../middlewares/authenticate.js';
+import { authenticate } from '/src/middlewares/authenticate.js';
 
 const router = Router();
 
