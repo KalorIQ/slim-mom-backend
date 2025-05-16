@@ -2,7 +2,7 @@ import createHttpError from 'http-errors';
 
 import * as authServices from '../services/auth.js';
 
-const authenticate = async (req, res, next) => {
+export const authenticate = async (req, res, next) => {
   // const {authorization} = req.headers;
   const authorization = req.get('Authorization');
 
@@ -36,5 +36,3 @@ const authenticate = async (req, res, next) => {
 
   next();
 };
-
-export default authenticate;

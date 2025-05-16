@@ -3,11 +3,11 @@ import {
   getDailyRateController,
   getMyDailyRateController,
 } from '../controllers/user.js';
-import validateBody from '../middlewares/validateBody.js';
+import { validateBody } from '../middlewares/validateBody.js';
 import { addMyProductsSchema, getDailyRateSchema } from '../validation/user.js';
-import { addMyProducts } from '../controllers/myProducts/addMyProducts.js';
-import { getMyProducts } from '../controllers/myProducts/getMyProducts.js';
-import { deleteMyProducts } from '../controllers/myProducts/deleteMyProducts.js';
+import { addMyProducts } from '../controllers/myProducts/addProducts.js';
+import { getMyProducts } from '../controllers/myProducts/getProducts.js';
+import { deleteMyProducts } from '../controllers/myProducts/deleteProducts.js';
 import { countCalories } from '../controllers/myProducts/countCalories.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import ctrlWrapper from '../utils/ctrlWrapper.js';

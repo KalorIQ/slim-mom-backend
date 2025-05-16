@@ -1,4 +1,4 @@
-import { calculateDailyCalory } from '../utils/calculateCalory.js';
+import { calculateCalory } from '../utils/calculateCalory.js';
 import createHttpError from 'http-errors';
 import { getNotAllowedFoodsService } from '../services/user.js';
 
@@ -11,7 +11,7 @@ export const getDailyRateController = async (req, res, next) => {
 
   const notAllowedFoods = await getNotAllowedFoodsService(bloodType);
 
-  const dailyRate = calculateDailyCalory({
+  const dailyRate = calculateCalory({
     currentWeight,
     height,
     age,
@@ -37,7 +37,7 @@ export const getMyDailyRateController = async (req, res, next) => {
 
   const notAllowedFoods = await getNotAllowedFoodsService(bloodType);
 
-  const dailyRate = calculateDailyCalory({
+  const dailyRate = calculateCalory({
     currentWeight,
     height,
     age,
