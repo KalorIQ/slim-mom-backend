@@ -1,21 +1,26 @@
 import { Schema } from 'mongoose';
 
-const productsSchema = new Schema(
+const productsSchema = new mongoose.Schema(
   {
-    name: {
+    categories: {
       type: String,
+    },
+    weight: {
+      type: Number,
+    },
+    title: {
+      type: String,
+    },
+    calories: {
+      type: Number,
+    },
+    groupBloodNotAllowed: {
+      type: [Boolean],
       required: true,
     },
-    category {
-      type: String,
-      required: true,
-      enum: ["cereals", "vegetables", "fruits", "dairy", "meat", "eggs", "flour", "dried fruits"],
-      ////// burda kaldım devam edeceğim
-    },
-
   },
   {
-    timestamps: true,
     versionKey: false,
+    timestamps: true,
   },
 );
