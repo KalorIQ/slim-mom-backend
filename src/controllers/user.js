@@ -46,7 +46,7 @@ export const getMyDailyRateController = async (req, res, next) => {
 
   res.status(200).json({
     status: 200,
-    message: 'successfully got daily rate!',
+    message: 'Successfully got daily rate!',
     data: { dailyRate, notAllowedFoods },
   });
 };
