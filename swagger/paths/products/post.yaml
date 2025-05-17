@@ -39,7 +39,7 @@ responses:
               example: 201
             message:
               type: string
-              example: Product added to my products successfuly
+              example: Product added to my products successfully
             product:
               type: object
               properties:
