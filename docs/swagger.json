@@ -11,10 +11,10 @@
   },
   "servers": [
     {
-      "url": "https://slimmomapp.com/"
+      "url": "https://localhost:3000/"
     },
     {
-      "url": "http://localhost:3000/"
+      "url": "https://example.com/api/v1"
     }
   ],
   "tags": [
@@ -34,7 +34,9 @@
   "paths": {
     "/register": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Register a new user",
         "operationId": "register",
         "description": "Register user",
@@ -45,7 +47,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["name", "email", "password"],
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -73,7 +79,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -103,7 +113,9 @@
     },
     "/login": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Autherization operations",
         "operationId": "login",
         "description": "Login user",
@@ -118,7 +130,10 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["email", "password"],
+                "required": [
+                  "email",
+                  "password"
+                ],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -142,7 +157,11 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -172,7 +191,9 @@
     },
     "/logout": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "User Logout",
         "operationId": "logout",
         "description": "Clears authentication token from cookies and ends the user session.",
@@ -188,7 +209,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message"],
+                  "required": [
+                    "status",
+                    "message"
+                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -211,10 +235,12 @@
     },
     "/products/searchProducts": {
       "get": {
-        "tags": ["Products"],
-        "summary": "Get products by search query",
-        "operationId": "getProducts",
-        "description": "Get products by search query",
+        "tags": [
+          "Products"
+        ],
+        "summary": "Get all products of the user for the selected date",
+        "operationId": "getAllProductsOfUserForSelectedDate",
+        "description": "Get all products of the user for the selected date",
         "security": [
           {
             "bearerAuth": []
@@ -222,40 +248,63 @@
         ],
         "parameters": [
           {
+            "name": "date",
             "in": "query",
-            "name": "title",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "amaranth"
+              "format": "date",
+              "example": "2025-12-31"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Get products matching the search query",
+            "description": "Products of the user for the selected date",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["status", "message", "data"],
                   "properties": {
-                    "status": {
-                      "type": "integer",
+                    "code": {
+                      "type": "number",
                       "example": 200
                     },
                     "message": {
                       "type": "string",
-                      "example": "Products matching your search!"
+                      "example": "Successfully got products!"
                     },
-                    "data": {
-                      "type": "object",
-                      "$ref": "#/components/schemas/products"
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "productId": {
+                            "type": "string",
+                            "example": "67d5d211fa93b3b9e8962774"
+                          },
+                          "date": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2025-12-31"
+                          },
+                          "productWeight": {
+                            "type": "number",
+                            "example": 100
+                          }
+                        }
+                      }
                     }
                   }
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -265,7 +314,9 @@
     },
     "/user/products": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Add a product to the user's daily",
         "operationId": "addProductToUsersDaily",
         "description": "Add a product to the user's daily",
@@ -280,7 +331,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["productId", "date", "productWeight"],
+                "required": [
+                  "productId",
+                  "date",
+                  "productWeight"
+                ],
                 "properties": {
                   "productId": {
                     "type": "date",
@@ -348,7 +403,9 @@
         }
       },
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Get all products of the user for the selected date",
         "operationId": "getAllProductsOfUserForSelectedDate",
         "description": "Get all products of the user for the selected date",
@@ -425,7 +482,9 @@
     },
     "/user/products/{productId}": {
       "delete": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Delete product by id for selected date",
         "description": "This endpoint allows user to delete product by id for selected date",
         "operationId": "deleteUserProduct",
@@ -462,7 +521,9 @@
     },
     "/user/my-daily-calories": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Get user's daily calories by date",
         "description": "This endpoint allows user to get daily calories by date",
         "operationId": "getUserDailyCalories",
@@ -527,7 +588,9 @@
     },
     "/user/my-daily-calory-needs": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Get logged in user's daily calory needs per day",
         "description": "This endpoint allows logged in user to get calory needs per day",
         "operationId": "getMyDailyRate",
@@ -568,7 +631,10 @@
                           "items": {
                             "type": "string"
                           },
-                          "example": ["sugar", "salt"]
+                          "example": [
+                            "sugar",
+                            "salt"
+                          ]
                         }
                       }
                     }
@@ -585,7 +651,9 @@
     },
     "/user/daily-calory-needs": {
       "post": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Get user's daily calory needs per day for given informations",
         "description": "This endpoint allows user to get calory needs per day for given informations",
         "operationId": "getDailyRate",
@@ -661,7 +729,10 @@
                           "items": {
                             "type": "string"
                           },
-                          "example": ["sugar", "salt"]
+                          "example": [
+                            "sugar",
+                            "salt"
+                          ]
                         }
                       }
                     }
@@ -688,7 +759,11 @@
     "schemas": {
       "user": {
         "type": "object",
-        "required": ["name", "email", "password"],
+        "required": [
+          "name",
+          "email",
+          "password"
+        ],
         "properties": {
           "_id": {
             "description": "User's id",
@@ -711,48 +786,6 @@
             "example": "12345678"
           }
         }
-      },
-      "products": {
-        "type": "object",
-        "required": [
-          "categories",
-          "weight",
-          "title",
-          "calories",
-          "groupBloodTypeNotAllowed"
-        ],
-        "properties": {
-          "_id": {
-            "description": "Product's id",
-            "type": "string",
-            "example": "5d51694902b2373622ff5d52"
-          },
-          "categories": {
-            "description": "Product's category",
-            "type": "string",
-            "example": "Vegetables and Herbs"
-          },
-          "weight": {
-            "description": "Product's weight",
-            "type": "number",
-            "example": 100
-          },
-          "title": {
-            "description": "Product's name",
-            "type": "string",
-            "example": "Amaranth Leaves"
-          },
-          "calories": {
-            "description": "Product's Calories",
-            "type": "number",
-            "example": 23
-          },
-          "groupBloodNotAllowed": {
-            "description": "Product not allowed for blood types:",
-            "type": "array",
-            "example": "[ null, false, false, false, false ]"
-          }
-        }
       }
     },
     "responses": {
@@ -762,7 +795,10 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message"],
+              "required": [
+                "status",
+                "message"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -783,7 +819,10 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["message", "data"],
+              "required": [
+                "message",
+                "data"
+              ],
               "properties": {
                 "message": {
                   "type": "string",
@@ -791,7 +830,9 @@
                 },
                 "data": {
                   "type": "object",
-                  "required": ["message"],
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
@@ -810,7 +851,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -822,7 +867,9 @@
                 },
                 "data": {
                   "type": "object",
-                  "required": ["message"],
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",
@@ -841,7 +888,11 @@
           "application/json": {
             "schema": {
               "type": "object",
-              "required": ["status", "message", "data"],
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
               "properties": {
                 "status": {
                   "type": "integer",
@@ -853,7 +904,9 @@
                 },
                 "data": {
                   "type": "object",
-                  "required": ["message"],
+                  "required": [
+                    "message"
+                  ],
                   "properties": {
                     "message": {
                       "type": "string",

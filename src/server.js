@@ -1,7 +1,14 @@
 import express from 'express';
-import pino from 'pino-http';
+import { pinoHttp } from 'pino-http';
 import cors from 'cors';
-import router from './routers/index.js';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import authRouter from './routers/auth.js';
+import userRouter from './routers/user.js';
+import productRouter from './routers/products.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { SwaggerDocs } from './middlewares/swaggerDocs.js';
 
 import { env } from './utils/env.js';
 
@@ -9,12 +16,28 @@ const PORT = Number(env('PORT', '3000'));
 
 export const startServer = () => {
   const app = express();
+  dotenv.config();
 
   app.use(express.json());
   app.use(cors());
+  app.use(cookieParser());
+
+  // Log all requests with more details
+  app.use((req, res, next) => {
+    console.log('Request details:');
+    console.log(`Method: ${req.method}`);
+    console.log(`URL: ${req.url}`);
+    console.log(`Base URL: ${req.baseUrl}`);
+    console.log(`Original URL: ${req.originalUrl}`);
+    console.log('Headers:', req.headers);
+    console.log('Query:', req.query);
+    console.log('Body:', req.body);
+    console.log('-------------------');
+    next();
+  });
 
   app.use(
-    pino({
+    pinoHttp({
       transport: {
         target: 'pino-pretty',
       },
@@ -27,25 +50,34 @@ export const startServer = () => {
     });
   });
 
-  // Mount the main router
-  app.use('/api', router);
+  // swagger docs
+  app.use('/api-docs', SwaggerDocs());
 
-  // Catch-all route for undefined routes
-  app.use((req, res) => {
-    res.status(404).json({
-      message: 'Not found',
-    });
-  });
+  // Mount the routers
+  app.use('/api/auth', authRouter);
+  app.use('/api/user', userRouter);
+  app.use('/api/products', productRouter);
 
-  // Error handling middleware
-  app.use((err, req, res, next) => {
-    res.status(500).json({
-      message: 'Something went wrong',
-      error: err.message,
-    });
-  });
+  // handlers for 404 and error
+  app.use(notFoundHandler);
+
+  // Error handler middleware
+  app.use(errorHandler);
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log('Available routes:');
+    console.log('GET /');
+    console.log('POST /api/auth/register');
+    console.log('POST /api/auth/login');
+    console.log('POST /api/auth/refresh');
+    console.log('POST /api/auth/logout');
+    console.log('POST /api/user/products');
+    console.log('GET /api/user/products');
+    console.log('DELETE /api/user/products/:id');
+    console.log('GET /api/user/my-daily-calories');
+    console.log('GET /api/user/my-daily-calory-needs');
+    console.log('POST /api/user/daily-calory-needs');
+    console.log('GET /api/products/searchProducts');
   });
 };
