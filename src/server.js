@@ -3,6 +3,8 @@ import { pinoHttp } from 'pino-http';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import authRouter from './routers/auth.js';
 import userRouter from './routers/user.js';
 import productRouter from './routers/products.js';
@@ -11,8 +13,13 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { SwaggerDocs } from './middlewares/swaggerDocs.js';
 
 import { env } from './utils/env.js';
+import router from './routers/auth.js';
 
 const PORT = Number(env('PORT', '3000'));
+
+// Get the directory name
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export const startServer = () => {
   const app = express();
@@ -21,6 +28,9 @@ export const startServer = () => {
   app.use(express.json());
   app.use(cors());
   app.use(cookieParser());
+
+  // Serve static files from the public directory
+  app.use(express.static(path.join(__dirname, '../public')));
 
   // Log all requests with more details
   app.use((req, res, next) => {
@@ -50,6 +60,7 @@ export const startServer = () => {
     });
   });
 
+  app.use(router);
   // swagger docs
   app.use('/api-docs', SwaggerDocs());
 

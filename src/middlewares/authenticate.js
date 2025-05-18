@@ -1,38 +1,38 @@
 import createHttpError from 'http-errors';
-
-import * as authServices from '../services/auth.js';
+import SessionCollection from '../db/models/session.js';
+import userCollection from '../db/models/user.js';
 
 export const authenticate = async (req, res, next) => {
-  // const {authorization} = req.headers;
-  const authorization = req.get('Authorization');
+  try {
+    const authHeader = req.get('Authorization');
+    if (!authHeader) {
+      return next(createHttpError(401, 'Authorization header is missing'));
+    }
 
-  if (!authorization) {
-    return next(createHttpError(401, 'Authorization header not found'));
+    const [bearer, token] = authHeader.split(' ');
+    if (bearer !== 'Bearer' || !token) {
+      return next(createHttpError(401, 'Invalid authorization format'));
+    }
+
+    const session = await SessionCollection.findOne({ accessToken: token });
+
+    if (!session) {
+      return next(createHttpError(401, 'Session not found'));
+    }
+
+    if (new Date() > new Date(session.accessTokenValidUntil)) {
+      return next(createHttpError(401, 'Access token expired'));
+    }
+
+    const user = await userCollection.findById(session.userId);
+    if (!user) {
+      return next(createHttpError(401, 'User not found'));
+    }
+
+    req.user = user;
+    req.token = token;
+    next();
+  } catch (error) {
+    next(error);
   }
-
-  const [bearer, token] = authorization.split(' ');
-
-  if (bearer !== 'Bearer') {
-    return next(
-      createHttpError(401, 'Authorization header must have Bearer type'),
-    );
-  }
-
-  const session = await authServices.findSessionByAccessToken(token);
-  if (!session) {
-    return next(createHttpError(401, 'Session not found'));
-  }
-
-  if (new Date() > session.accessTokenValidUntil) {
-    return next(createHttpError(401, 'Access token expired'));
-  }
-
-  const user = await authServices.findUser({ _id: session.userId });
-  if (!user) {
-    return next(createHttpError(401, 'User not found'));
-  }
-
-  req.user = user;
-
-  next();
 };

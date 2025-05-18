@@ -26,7 +26,7 @@ requestBody:
             example: 'securePassword123'
 responses:
   '200':
-    description: 'User login successful'
+    description: 'User login is Successful'
     content:
       application/json:
         schema:

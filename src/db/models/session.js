@@ -23,6 +23,6 @@ const sessionSchema = new Schema({
   },
 });
 
-const sessionCollection = model('sessions', sessionSchema);
+const SessionCollection = model('sessions', sessionSchema);
 
-export default sessionCollection;
+export default SessionCollection;

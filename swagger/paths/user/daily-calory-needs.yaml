@@ -1,6 +1,6 @@
 tags:
   - User
-summary: Get user's daily calory needs per day for given informations
+summary: Get user's daily calory needs per day for given information
 description: This endpoint allows user to get calory needs per day for given informations
 operationId: getDailyRate
 requestBody:

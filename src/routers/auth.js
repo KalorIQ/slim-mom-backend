@@ -3,10 +3,10 @@ import ctrlWrapper from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { registerUserSchema } from '../validation/auth.js';
 import {
-  registerController,
-  loginController,
-  refreshController,
-  logoutController,
+  registerUserController,
+  refreshUserController,
+  logoutUser,
+  loginUserController,
 } from '../controllers/auth.js';
 import { loginUserSchema } from '../validation/auth.js';
 import { authenticate } from '../middlewares/authenticate.js';
@@ -16,15 +16,15 @@ const router = Router();
 router.post(
   '/register',
   validateBody(registerUserSchema),
-  ctrlWrapper(registerController),
+  ctrlWrapper(registerUserController),
 );
 router.post(
   '/login',
   validateBody(loginUserSchema),
-  ctrlWrapper(loginController),
+  ctrlWrapper(loginUserController),
 );
-router.post('/refresh', ctrlWrapper(refreshController));
+router.post('/refresh', ctrlWrapper(refreshUserController));
 
-router.post('/logout', authenticate, ctrlWrapper(logoutController));
+router.post('/logout', authenticate, ctrlWrapper(logoutUser));
 
 export default router;

@@ -152,7 +152,7 @@
         },
         "responses": {
           "200": {
-            "description": "User login successful",
+            "description": "User login is Successful",
             "content": {
               "application/json": {
                 "schema": {
@@ -238,9 +238,9 @@
         "tags": [
           "Products"
         ],
-        "summary": "Get all products of the user for the selected date",
-        "operationId": "getAllProductsOfUserForSelectedDate",
-        "description": "Get all products of the user for the selected date",
+        "summary": "Get products by search query",
+        "operationId": "getProducts",
+        "description": "Get products by search query",
         "security": [
           {
             "bearerAuth": []
@@ -248,63 +248,44 @@
         ],
         "parameters": [
           {
-            "name": "date",
             "in": "query",
+            "name": "title",
             "required": true,
             "schema": {
               "type": "string",
-              "format": "date",
-              "example": "2025-12-31"
+              "example": "amaranth"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Products of the user for the selected date",
+            "description": "Get products matching the search query",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
                   "properties": {
-                    "code": {
-                      "type": "number",
+                    "status": {
+                      "type": "integer",
                       "example": 200
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully got products!"
+                      "example": "Products matching your search!"
                     },
-                    "products": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "productId": {
-                            "type": "string",
-                            "example": "67d5d211fa93b3b9e8962774"
-                          },
-                          "date": {
-                            "type": "string",
-                            "format": "date",
-                            "example": "2025-12-31"
-                          },
-                          "productWeight": {
-                            "type": "number",
-                            "example": 100
-                          }
-                        }
-                      }
+                    "data": {
+                      "type": "object",
+                      "$ref": "#/components/schemas/products"
                     }
                   }
                 }
               }
             }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
           },
           "404": {
             "$ref": "#/components/responses/404"
@@ -369,7 +350,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Product added to my products successfuly"
+                      "example": "Product added to my products successfully"
                     },
                     "product": {
                       "type": "object",
@@ -654,7 +635,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Get user's daily calory needs per day for given informations",
+        "summary": "Get user's daily calory needs per day for given information",
         "description": "This endpoint allows user to get calory needs per day for given informations",
         "operationId": "getDailyRate",
         "requestBody": {
@@ -784,6 +765,48 @@
             "description": "User's password",
             "type": "string",
             "example": "12345678"
+          }
+        }
+      },
+      "products": {
+        "type": "object",
+        "required": [
+          "categories",
+          "weight",
+          "title",
+          "calories",
+          "groupBloodTypeNotAllowed"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Product's id",
+            "type": "string",
+            "example": "5d51694902b2373622ff5d52"
+          },
+          "categories": {
+            "description": "Product's category",
+            "type": "string",
+            "example": "Vegetables and Herbs"
+          },
+          "weight": {
+            "description": "Product's weight",
+            "type": "number",
+            "example": 100
+          },
+          "title": {
+            "description": "Product's name",
+            "type": "string",
+            "example": "Amaranth Leaves"
+          },
+          "calories": {
+            "description": "Product's Calories",
+            "type": "number",
+            "example": 23
+          },
+          "groupBloodNotAllowed": {
+            "description": "Product not allowed for blood types:",
+            "type": "array",
+            "example": "[ null, false, false, false, false ]"
           }
         }
       }
