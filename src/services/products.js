@@ -12,6 +12,7 @@ export const removeProduct = async (userId, { productId }) => {
     owner: userId,
   });
 };
+
 export const getProductsByDay = async (userId, date) => {
   const allDates = await productsPerDate.find({ owner: userId, date });
   const products = allDates.map((el) => {
@@ -39,4 +40,25 @@ export const getProductsByDay = async (userId, date) => {
     }, []);
   }
   return productsOptimized;
+};
+
+export const getProductsByQuery = async (userId, { title }) => {
+  const regex = new RegExp(title, 'i');
+  const data = await productsPerDate
+    .find({ title: regex, owner: userId })
+    .limit(10);
+  return data;
+};
+
+export const getAllProducts = async (userId) => {
+  const allProducts = await productsPerDate.find({ owner: userId });
+  const products = allProducts.map((el) => {
+    return {
+      kcal: el.kcal,
+      weight: el.weight,
+      title: el.title,
+      id: el._id,
+    };
+  });
+  return products;
 };
