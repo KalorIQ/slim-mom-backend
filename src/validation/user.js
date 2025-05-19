@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import Joi from "joi";
 
 export const getDailyRateSchema = Joi.object({
   currentWeight: Joi.number().integer().min(30).max(300).required(),
@@ -9,10 +9,10 @@ export const getDailyRateSchema = Joi.object({
     .min(30)
     .max(300)
     .required()
-    .when('currentWeight', {
+    .when("currentWeight", {
       is: Joi.exist(),
-      then: Joi.number().less(Joi.ref('currentWeight')).messages({
-        'number.less': '"desiredWeight" must be less than "currentWeight"',
+      then: Joi.number().less(Joi.ref("currentWeight")).messages({
+        "number.less": '"desiredWeight" must be less than "currentWeight"',
       }),
     }),
   bloodType: Joi.number().integer().min(1).max(4).required(),
@@ -22,7 +22,7 @@ export const addMyProductsSchema = Joi.object({
   productId: Joi.string().required(),
   productWeight: Joi.number().required(),
   date: Joi.date().required().messages({
-    'date.base': 'Invalid date format',
-    'date.format': 'Invalid date format, please use YYYY-MM-DD',
+    "date.base": "Invalid date format",
+    "date.format": "Invalid date format, please use YYYY-MM-DD",
   }),
 });

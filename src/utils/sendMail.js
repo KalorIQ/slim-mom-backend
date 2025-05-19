@@ -1,7 +1,7 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
-import { SMTP } from '../constants/index.js';
-import { env } from './env.js';
+import { SMTP } from "../constants/index.js";
+import { env } from "./env.js";
 
 export const sendMail = async (options) => {
   const transporter = nodemailer.createTransport({
@@ -15,17 +15,17 @@ export const sendMail = async (options) => {
 
   try {
     await transporter.verify();
-    console.log('SMTP connection is valid');
+    console.log("SMTP connection is valid");
   } catch (error) {
-    console.error('SMTP connection error:', error);
+    console.error("SMTP connection error:", error);
     throw error;
   }
 
   try {
     await transporter.sendMail(options);
-    console.log('Email sent successfully');
+    console.log("Email sent successfully");
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("Error sending email:", error);
     throw error;
   }
 };

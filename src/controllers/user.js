@@ -1,6 +1,6 @@
-import { calculateCalory } from '../utils/calculateCalory.js';
-import createHttpError from 'http-errors';
-import { getNotAllowedFoodsService } from '../services/user.js';
+import { calculateCalory } from "../utils/calculateCalory.js";
+import createHttpError from "http-errors";
+import { getNotAllowedFoodsService } from "../services/user.js";
 
 export const getDailyRateController = async (req, res, next) => {
   const currentWeight = Number(req.body.currentWeight);
@@ -20,14 +20,14 @@ export const getDailyRateController = async (req, res, next) => {
 
   res.status(200).json({
     status: 200,
-    message: 'successfully got daily rate!',
+    message: "successfully got daily rate!",
     data: { dailyRate, notAllowedFoods },
   });
 };
 
 export const getMyDailyRateController = async (req, res, next) => {
   if (!req.user) {
-    next(createHttpError(401, 'You are not authorized!'));
+    next(createHttpError(401, "You are not authorized!"));
   }
   const currentWeight = Number(req.user.currentWeight);
   const height = Number(req.user.height);
@@ -46,7 +46,7 @@ export const getMyDailyRateController = async (req, res, next) => {
 
   res.status(200).json({
     status: 200,
-    message: 'Successfully got daily rate!',
+    message: "Successfully got daily rate!",
     data: { dailyRate, notAllowedFoods },
   });
 };

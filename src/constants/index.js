@@ -1,14 +1,20 @@
-import path from 'path';
+import path from "path";
 
-export const SORT_ORDER = ['asc', 'desc'];
+export const SORT_ORDER = ["asc", "desc"];
 export const SMTP = {
-  SMTP_HOST: 'SMTP_HOST',
-  SMTP_PORT: 'SMTP_PORT',
-  SMTP_USER: 'SMTP_USER',
-  SMTP_PASSWORD: 'SMTP_PASSWORD',
-  SMTP_FROM: 'SMTP_FROM',
+  SMTP_HOST: "SMTP_HOST",
+  SMTP_PORT: "SMTP_PORT",
+  SMTP_USER: "SMTP_USER",
+  SMTP_PASSWORD: "SMTP_PASSWORD",
+  SMTP_FROM: "SMTP_FROM",
 };
 
-export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
-export const TEMP_FOLDER = path.join(process.cwd(), 'temp');
-export const UPLOAD_FOLDER = path.join(process.cwd(), 'uploads');
+export const TEMPLATES_DIR = path.join(process.cwd(), "src", "templates");
+export const TEMP_FOLDER = path.join(process.cwd(), "temp");
+export const UPLOAD_FOLDER = path.join(process.cwd(), "uploads");
+
+export const SWAGGER_PATH = path.join(
+  process.cwd(),
+  "src/docs",
+  "swagger.json"
+);

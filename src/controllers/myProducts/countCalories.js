@@ -1,15 +1,15 @@
-import createHttpError from 'http-errors';
-import { getProductsForDateService } from '../../services/user.js';
+import createHttpError from "http-errors";
+import { getProductsForDateService } from "../../services/user.js";
 
 const countCalories = async (req, res) => {
   const { date } = req.query;
   const owner = req.user._id;
 
   if (!date || isNaN(Date.parse(date))) {
-    throw createHttpError(400, 'Invalid date!');
+    throw createHttpError(400, "Invalid date!");
   }
 
-  const dateFormatted = new Date(date).toISOString().split('T')[0];
+  const dateFormatted = new Date(date).toISOString().split("T")[0];
   const products = await getProductsForDateService(owner, dateFormatted);
 
   if (!products.length) {

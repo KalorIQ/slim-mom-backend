@@ -4,7 +4,7 @@ export const validateBody = (schema) => async (req, res, next) => {
     next();
   } catch (error) {
     res.status(400).send({
-      message: 'Validation error',
+      message: "Validation error",
       status: 400,
       errors: error.details.map((detail) => detail.message),
     });

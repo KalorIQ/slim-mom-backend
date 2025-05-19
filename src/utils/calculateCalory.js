@@ -9,6 +9,6 @@ export const calculateCalory = ({
       6.25 * height -
       5 * age -
       161 -
-      10 * (currentWeight - desiredWeight),
+      10 * (currentWeight - desiredWeight)
   );
 };

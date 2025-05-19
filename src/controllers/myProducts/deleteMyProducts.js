@@ -1,6 +1,6 @@
-import createHttpError from 'http-errors';
-import { MyProducts } from '../../db/models/MyProducts.model.js';
-import mongoose from 'mongoose';
+import createHttpError from "http-errors";
+import { MyProducts } from "../../db/models/MyProducts.model.js";
+import mongoose from "mongoose";
 
 const deleteMyProducts = async (req, res) => {
   const { date } = req.query;
@@ -8,13 +8,13 @@ const deleteMyProducts = async (req, res) => {
   const owner = req.user._id;
 
   if (!date || isNaN(Date.parse(date))) {
-    throw createHttpError(400, 'Invalid date!');
+    throw createHttpError(400, "Invalid date!");
   }
 
   if (!mongoose.Types.ObjectId.isValid(id))
     throw createHttpError(400, `Invalid ID: ${id}`);
 
-  const dateFormatted = new Date(date).toISOString().split('T')[0];
+  const dateFormatted = new Date(date).toISOString().split("T")[0];
 
   const deletedProduct = await MyProducts.findOneAndDelete({
     productId: id,
@@ -28,7 +28,7 @@ const deleteMyProducts = async (req, res) => {
     });
   }
 
-  res.status(204).json({ message: 'Product deleted!', deletedProduct });
+  res.status(204).json({ message: "Product deleted!", deletedProduct });
 };
 
 export { deleteMyProducts };
