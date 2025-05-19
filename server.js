@@ -5,15 +5,15 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import authRouter from './routers/auth.js';
-import userRouter from './routers/user.js';
-import productRouter from './routers/products.js';
-import { notFoundHandler } from './middlewares/notFoundHandler.js';
-import { errorHandler } from './middlewares/errorHandler.js';
-import { SwaggerDocs } from './middlewares/swaggerDocs.js';
+import authRouter from './src/routers/auth.js';
+import userRouter from './src/routers/user.js';
+import productRouter from './src/routers/products.js';
+import { notFoundHandler } from './src/middlewares/notFoundHandler.js';
+import { errorHandler } from './src/middlewares/errorHandler.js';
+import { SwaggerDocs } from './src/middlewares/swaggerDocs.js';
 
-import { env } from './utils/env.js';
-import router from './routers/auth.js';
+import { env } from './src/utils/env.js';
+import router from './src/routers/auth.js';
 
 const PORT = Number(env('PORT', '3000'));
 
