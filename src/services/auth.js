@@ -1,26 +1,27 @@
-import userCollection from "../db/models/user.js";
-import bcrypt from "bcrypt";
-import SessionCollection from "../db/models/session.js";
-import createHttpError from "http-errors";
-import { randomBytes } from "crypto";
+import userCollection from '../db/models/user.js';
+import bcrypt from 'bcrypt';
+import SessionCollection from '../db/models/session.js';
+import createHttpError from 'http-errors';
+import { randomBytes } from 'crypto';
+import mongoose from 'mongoose';
 
 import {
   accessTokenLifetime,
   refreshTokenLifetime,
-} from "../constants/user.js";
-import jwt from "jsonwebtoken";
-import { env } from "../utils/env.js";
+} from '../constants/user.js';
+import jwt from 'jsonwebtoken';
+import { env } from '../utils/env.js';
 
-import { sendMail } from "../utils/sendMail.js";
-import path from "node:path";
-import fs from "node:fs/promises";
-import handlebars from "handlebars";
+import { sendMail } from '../utils/sendMail.js';
+import path from 'node:path';
+import fs from 'node:fs/promises';
+import handlebars from 'handlebars';
 
-const TEMPLATES_DIR = path.join(process.cwd(), "src", "templates");
+const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
 
 const createSession = () => {
-  const accessToken = randomBytes(30).toString("base64");
-  const refreshToken = randomBytes(30).toString("base64");
+  const accessToken = randomBytes(30).toString('base64');
+  const refreshToken = randomBytes(30).toString('base64');
   const accessTokenValidUntil = new Date(Date.now() + accessTokenLifetime);
   const refreshTokenValidUntil = new Date(Date.now() + refreshTokenLifetime);
 
@@ -37,7 +38,7 @@ export const registerUser = async (payload) => {
 
   const user = await userCollection.findOne({ email });
   if (user) {
-    throw createHttpError(409, "Email in use");
+    throw createHttpError(409, 'Email in use');
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
@@ -56,23 +57,23 @@ export const getUser = async (email) => {
     const userAuth = await userCollection.findOne({ email: email });
     return userAuth;
   } catch (e) {
-    throw new Error("Failed to fetch users", e);
+    throw new Error('Failed to fetch users', e);
   }
 };
 
-const ACCESS_TOKEN_EXPIRY = "15m";
-const REFRESH_TOKEN_EXPIRY = "30d";
+// const ACCESS_TOKEN_EXPIRY = '15m';
+// const REFRESH_TOKEN_EXPIRY = '30d';
 
 export const loginUser = async (payload) => {
   const { email, password } = payload;
   const user = await userCollection.findOne({ email });
   if (!user) {
-    throw createHttpError(401, "Email or password invalid");
+    throw createHttpError(401, 'Email or password invalid');
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw createHttpError(401, "Email or password invalid");
+    throw createHttpError(401, 'Email or password invalid');
   }
 
   // Delete any existing sessions for this user
@@ -107,11 +108,11 @@ export const refreshSession = async ({ refreshToken, sessionId }) => {
   });
 
   if (!oldSession) {
-    throw createHttpError(401, "Session not found");
+    throw createHttpError(401, 'Session not found');
   }
 
   if (new Date() > oldSession.refreshTokenValidUntil) {
-    throw createHttpError(401, "Session token expired");
+    throw createHttpError(401, 'Session token expired');
   }
 
   await SessionCollection.deleteOne({ _id: sessionId });
@@ -128,26 +129,27 @@ export const refreshSession = async ({ refreshToken, sessionId }) => {
 
 export const refreshUser = async ({ sessionId, refreshToken }) => {
   try {
-    const objectId = mongoose.Types.ObjectId.createFromHexString(sessionId);
+    // console.log('In refreshUser Service sessionId', sessionId);
+    // console.log('In refreshUser Service refreshToken', refreshToken);
     const session = await SessionCollection.findOne({
-      _id: objectId,
+      _id: sessionId,
       refreshToken,
     });
-
+    // console.log('In refreshUser Service session', session);
     if (!session) {
-      throw createHttpError(404, "Session not found");
+      throw createHttpError(404, 'Session not found');
     }
-    console.log("Found Session:", session);
+    // console.log('Found Session:', session);
     const isSessionTokenExpired =
       new Date() > new Date(session.refreshTokenValidUntil);
 
     if (isSessionTokenExpired) {
-      throw createHttpError(401, "Session token expired");
+      throw createHttpError(401, 'Session token expired');
     }
 
     const newSession = createSession();
 
-    await SessionCollection.deleteOne({ _id: objectId, refreshToken });
+    await SessionCollection.deleteOne({ _id: sessionId, refreshToken });
 
     return await SessionCollection.create({
       userId: session.userId,
@@ -167,7 +169,7 @@ export const findUser = (filter) => userCollection.findOne(filter);
 export const requestResetToken = async (email) => {
   const user = await userCollection.findOne({ email });
   if (!user) {
-    throw createHttpError(404, "User not found");
+    throw createHttpError(404, 'User not found');
   }
 
   const resetToken = jwt.sign(
@@ -177,12 +179,12 @@ export const requestResetToken = async (email) => {
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: "15m",
-    }
+      expiresIn: '15m',
+    },
   );
 
-  const templatePath = path.join(TEMPLATES_DIR, "reset-password-mail.html");
-  const templateContent = await fs.readFile(templatePath, "utf-8");
+  const templatePath = path.join(TEMPLATES_DIR, 'reset-password-mail.html');
+  const templateContent = await fs.readFile(templatePath, 'utf-8');
   const template = handlebars.compile(templateContent.toString());
 
   const htmlContent = template({
@@ -192,7 +194,7 @@ export const requestResetToken = async (email) => {
   await sendMail({
     from: process.env.SMTP_FROM,
     to: user.email,
-    subject: "Welcome to Reset Password Mail",
+    subject: 'Welcome to Reset Password Mail',
     html: htmlContent,
   });
 
@@ -203,20 +205,20 @@ export const resetPassword = async (payload) => {
   const { token, password } = payload;
 
   if (!token) {
-    throw createHttpError(400, "Token is required");
+    throw createHttpError(400, 'Token is required');
   }
 
   let decodedToken;
   try {
     decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     if (!decodedToken) {
-      throw createHttpError(401, "Invalid token");
+      throw createHttpError(401, 'Invalid token');
     }
   } catch (error) {
-    console.log("error", error);
-    throw createHttpError(401, "Invalid token");
+    console.log('error', error);
+    throw createHttpError(401, 'Invalid token');
   }
-  console.log("decodedToken", decodedToken);
+  console.log('decodedToken', decodedToken);
 
   const userId = decodedToken.sub;
   const userEmail = decodedToken.email;
@@ -227,7 +229,7 @@ export const resetPassword = async (payload) => {
   });
 
   if (!user) {
-    throw createHttpError(404, "User not found");
+    throw createHttpError(404, 'User not found');
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);

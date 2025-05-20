@@ -22,6 +22,7 @@ export const registerUserController = async (req, res, next) => {
 
     const newUser = await registerUser({ name, email, password });
 
+    // eslint-disable-next-line no-undef
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });

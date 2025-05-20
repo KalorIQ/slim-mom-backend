@@ -1,5 +1,5 @@
 import express from "express";
-import { pinoHttp } from "pino-http";
+// import { pinoHttp } from "pino-http";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
@@ -46,13 +46,13 @@ export const startServer = () => {
     next();
   });
 
-  app.use(
-    pinoHttp({
-      transport: {
-        target: "pino-pretty",
-      },
-    })
-  );
+  // app.use(
+  //   pinoHttp({
+  //     transport: {
+  //       target: "pino-pretty",
+  //     },
+  //   })
+  // );
 
   app.get("/", (req, res) => {
     res.json({
