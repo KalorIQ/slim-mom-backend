@@ -20,8 +20,8 @@ import handlebars from 'handlebars';
 const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
 
 const createSession = () => {
-  const accessToken = randomBytes(30).toString('base64');
-  const refreshToken = randomBytes(30).toString('base64');
+  const accessToken = randomBytes(30).toString('hex');
+  const refreshToken = randomBytes(30).toString('hex');
   const accessTokenValidUntil = new Date(Date.now() + accessTokenLifetime);
   const refreshTokenValidUntil = new Date(Date.now() + refreshTokenLifetime);
 
