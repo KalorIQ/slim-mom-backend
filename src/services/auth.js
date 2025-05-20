@@ -3,20 +3,19 @@ import bcrypt from 'bcrypt';
 import SessionCollection from '../db/models/session.js';
 import createHttpError from 'http-errors';
 import { randomBytes } from 'crypto';
-import mongoose from 'mongoose';
 
 import {
   accessTokenLifetime,
   refreshTokenLifetime,
 } from '../constants/user.js';
 import jwt from 'jsonwebtoken';
-import { env } from '../utils/env.js';
 
 import { sendMail } from '../utils/sendMail.js';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import handlebars from 'handlebars';
 
+// eslint-disable-next-line no-undef
 const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
 
 const createSession = () => {
@@ -178,6 +177,7 @@ export const requestResetToken = async (email) => {
       sub: user._id,
       email: user.email,
     },
+    // eslint-disable-next-line no-undef
     process.env.JWT_SECRET,
     {
       expiresIn: '15m',
@@ -193,6 +193,7 @@ export const requestResetToken = async (email) => {
     url: `http://localhost:3000/auth/reset-password?token=${resetToken}`,
   });
   await sendMail({
+    // eslint-disable-next-line no-undef
     from: process.env.SMTP_FROM,
     to: user.email,
     subject: 'Welcome to Reset Password Mail',
@@ -211,6 +212,7 @@ export const resetPassword = async (payload) => {
 
   let decodedToken;
   try {
+    // eslint-disable-next-line no-undef
     decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     if (!decodedToken) {
       throw createHttpError(401, 'Invalid token');
