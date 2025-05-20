@@ -92,6 +92,7 @@ export const loginUser = async (payload) => {
     user: {
       name: user.name,
       email: user.email,
+      infouser: user.infouser,
     },
   };
 

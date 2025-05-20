@@ -3,6 +3,9 @@ import createHttpError from "http-errors";
 import { getNotAllowedFoodsService } from "../services/user.js";
 
 export const getDailyRateController = async (req, res, next) => {
+  console.log('In getDailyRateController req.query', req.query);
+  console.log('In getDailyRateController req.user', req.user);
+
   const currentWeight = Number(req.body.currentWeight);
   const height = Number(req.body.height);
   const age = Number(req.body.age);
@@ -29,13 +32,20 @@ export const getMyDailyRateController = async (req, res, next) => {
   if (!req.user) {
     next(createHttpError(401, "You are not authorized!"));
   }
-  const currentWeight = Number(req.user.currentWeight);
-  const height = Number(req.user.height);
-  const age = Number(req.user.age);
-  const desiredWeight = Number(req.user.desiredWeight);
-  const bloodType = Number(req.user.bloodType);
+  console.log('In getMyDailyRateController req.user', req.user);
+  const currentWeight = Number(req.user.infouser.currentWeight);
+  const height = Number(req.user.infouser.height);
+  const age = Number(req.user.infouser.age);
+  const desiredWeight = Number(req.user.infouser.desireWeight);
+  const bloodType = Number(req.user.infouser.bloodType);
+  console.log('In getMyDailyRateController currentWeight', currentWeight);
+  console.log('In getMyDailyRateController height', height);
+  console.log('In getMyDailyRateController age', age);
+  console.log('In getMyDailyRateController desiredWeight', desiredWeight);
+  console.log('In getMyDailyRateController bloodType', bloodType);
 
   const notAllowedFoods = await getNotAllowedFoodsService(bloodType);
+  console.log('In getMyDailyRateController notAllowedFoods', notAllowedFoods);
 
   const dailyRate = calculateCalory({
     currentWeight,
@@ -43,7 +53,7 @@ export const getMyDailyRateController = async (req, res, next) => {
     age,
     desiredWeight,
   });
-
+  console.log('In getMyDailyRateController dailyRate', dailyRate);
   res.status(200).json({
     status: 200,
     message: "Successfully got daily rate!",
