@@ -1,4 +1,4 @@
-import Product from '../db/models/products.js';
+import Products from '../db/models/products.js';
 import { errorHandler } from '../middlewares/errorHandler.js';
 
 export async function getProductsByQuery(req, res, next) {
@@ -9,7 +9,7 @@ export async function getProductsByQuery(req, res, next) {
     }
 
     const regex = new RegExp(title, 'i');
-    const data = await Product.find({ title: regex }).limit(10);
+    const data = await Products.find({ title: regex }).limit(10);
 
     res.status(200).json({
       message: 'Products matching your search',
@@ -22,7 +22,7 @@ export async function getProductsByQuery(req, res, next) {
 
 export async function getAllProducts(req, res, next) {
   try {
-    const allProducts = await Product.find();
+    const allProducts = await Products.find();
     const products = allProducts.map((el) => {
       return {
         kcal: el.kcal,
@@ -47,7 +47,7 @@ export async function addProduct(req, res, next) {
       return next(errorHandler);
     }
 
-    const newProduct = await Product.create({ title, weight, kcal });
+    const newProduct = await Products.create({ title, weight, kcal });
     res.status(201).json({
       message: 'Product added successfully',
       data: newProduct,
@@ -63,7 +63,7 @@ export async function removeProduct(req, res, next) {
       return next(errorHandler);
     }
 
-    const deletedProduct = await Product.findByIdAndDelete(productId);
+    const deletedProduct = await Products.findByIdAndDelete(productId);
     if (!deletedProduct) {
       return res.status(404).json({
         message: 'Product not found',
