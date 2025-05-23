@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 const Joi = require('joi');
 
 export const validateSearch = (req, res, next) => {
@@ -17,6 +18,7 @@ export const validateSearch = (req, res, next) => {
     next();
   }
 };
+// eslint-disable-next-line no-unused-vars
 const validateDate = (req, res, next) => {
   const schemaDate = Joi.object({
     date: Joi.string()

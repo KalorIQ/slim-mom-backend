@@ -1,8 +1,11 @@
 import { calculateCalory } from '../utils/calculateCalory.js';
 import createHttpError from 'http-errors';
-import { getNotAllowedFoodsService } from '../services/user.js';
+import {
+  getNotAllowedFoodsService,
+  updateInfouserService,
+} from '../services/user.js';
 
-export const getDailyRateController = async (req, res, next) => {
+export const getDailyRateController = async (req, res) => {
   console.log('In getDailyRateController req.query', req.query);
   console.log('In getDailyRateController req.user', req.user);
 
@@ -25,6 +28,31 @@ export const getDailyRateController = async (req, res, next) => {
     status: 200,
     message: 'successfully got daily rate!',
     data: { dailyRate, notAllowedFoods },
+  });
+};
+
+export const updateInfouserController = async (req, res) => {
+  console.log('In updateInfouserController req.body', req.body);
+  const { _id } = req.user;
+  console.log('In updateInfouserController _id', _id);
+  const { currentWeight, height, age, desireWeight, bloodType } = req.body;
+  const updatedUser = await updateInfouserService(
+    _id,
+    currentWeight,
+    height,
+    age,
+    desireWeight,
+    bloodType,
+  );
+
+  if (!updatedUser) {
+    throw createHttpError(404, 'User not found');
+  }
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully updated user information!',
+    data: updatedUser,
   });
 };
 

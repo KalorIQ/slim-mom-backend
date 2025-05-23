@@ -4,14 +4,14 @@ import {
   getMyDailyRateController,
 } from '../controllers/user.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { addMyProductsSchema, getDailyRateSchema } from '../validation/user.js';
+import { addMyProductsSchema, getDailyRateSchema, updateInfouserSchema } from '../validation/user.js';
 import { addMyProducts } from '../controllers/myProducts/addMyProducts.js';
 import { getMyProducts } from '../controllers/myProducts/getMyProducts.js';
 import { deleteMyProducts } from '../controllers/myProducts/deleteMyProducts.js';
 import { countCalories } from '../controllers/myProducts/countCalories.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import ctrlWrapper from '../utils/ctrlWrapper.js';
-
+import { updateInfouserController } from '../controllers/user.js';
 const router = Router();
 
 router.post(
@@ -31,7 +31,14 @@ router.get(
   ctrlWrapper(getMyDailyRateController),
 );
 
-// Zaten Frontenddeki gibi yapıyoruz.
+router.patch(
+  '/infouser-update',
+  authenticate,
+  validateBody(updateInfouserSchema),
+  ctrlWrapper(updateInfouserController),
+);
+
+// Zaten Frontendde yapıyoruz.
 router.post(
   '/daily-calory-needs',
   validateBody(getDailyRateSchema),
