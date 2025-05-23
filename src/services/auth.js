@@ -43,25 +43,32 @@ export const registerUser = async (payload) => {
   // Handle the case where infouser is not provided
   let userInfoData = {};
 
-  if (infouser && infouser.currentWeight && infouser.height && infouser.age && infouser.desireWeight) {
-    // If all required infouser fields are provided, calculate dailyRate
+  // Helper function to check if a value is a valid positive number
+  const isValidNumber = (value) => {
+    return value !== null && value !== undefined && !isNaN(value) && Number(value) > 0;
+  };
+
+  // Check if all required fields are provided and are valid numbers
+  const hasCompleteValidInfo =
+    infouser &&
+    isValidNumber(infouser.currentWeight) &&
+    isValidNumber(infouser.height) &&
+    isValidNumber(infouser.age) &&
+    isValidNumber(infouser.desireWeight);
+
+  if (hasCompleteValidInfo) {
+    // If all required infouser fields are provided and valid, calculate dailyRate
     userInfoData = {
       ...infouser,
       dailyRate: calculateCalory({
-        currentWeight: infouser.currentWeight,
-        height: infouser.height,
-        age: infouser.age,
-        desireWeight: infouser.desireWeight,
+        currentWeight: Number(infouser.currentWeight),
+        height: Number(infouser.height),
+        age: Number(infouser.age),
+        desireWeight: Number(infouser.desireWeight),
       }),
     };
-  } else if (infouser) {
-    // If infouser is provided but incomplete, spread the available fields
-    userInfoData = {
-      ...infouser,
-      dailyRate: null, // Set dailyRate to null if we can't calculate it
-    };
   } else {
-    // If infouser is not provided at all, create empty object with default values
+    // If infouser is not provided, create empty object with default values
     userInfoData = {
       currentWeight: null,
       height: null,
