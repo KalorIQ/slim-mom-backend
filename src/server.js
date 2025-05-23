@@ -16,6 +16,7 @@ import { env } from './utils/env.js';
 import router from './routers/auth.js';
 
 const PORT = Number(env('PORT', '3000'));
+const ORIGIN = env('APP_VERCEL_DOMAIN');
 
 // Get the directory name
 const __filename = fileURLToPath(import.meta.url);
@@ -27,7 +28,7 @@ export const startServer = () => {
   app.use(express.json());
   app.use(
     cors({
-      origin: ['http://localhost:5173', 'YOUR_OTHER_ORIGIN_HERE'], // Add your other origin here
+      origin: ['http://localhost:5173', ORIGIN],
       credentials: true,
     }),
   );
@@ -81,18 +82,18 @@ export const startServer = () => {
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    console.log('Available routes:');
-    console.log('GET /');
-    console.log('POST /api/auth/register');
-    console.log('POST /api/auth/login');
-    console.log('POST /api/auth/refresh');
-    console.log('POST /api/auth/logout');
-    console.log('POST /api/user/products');
-    console.log('GET /api/user/products');
-    console.log('DELETE /api/user/products/:id');
-    console.log('GET /api/user/my-daily-calories');
-    console.log('GET /api/user/my-daily-calory-needs');
-    console.log('POST /api/user/daily-calory-needs');
-    console.log('GET /api/products/searchProducts');
+    // console.log('Available routes:');
+    // console.log('GET /');
+    // console.log('POST /api/auth/register');
+    // console.log('POST /api/auth/login');
+    // console.log('POST /api/auth/refresh');
+    // console.log('POST /api/auth/logout');
+    // console.log('POST /api/user/products');
+    // console.log('GET /api/user/products');
+    // console.log('DELETE /api/user/products/:id');
+    // console.log('GET /api/user/my-daily-calories');
+    // console.log('GET /api/user/my-daily-calory-needs');
+    // console.log('POST /api/user/daily-calory-needs');
+    // console.log('GET /api/products/searchProducts');
   });
 };
