@@ -13,7 +13,7 @@ requestBody:
           - weight
           - height
           - age
-          - desiredWeight
+          - desireWeight
           - bloodType
         properties:
           weight:
@@ -25,7 +25,7 @@ requestBody:
           age:
             type: number
             example: 25
-          desiredWeight:
+          desireWeight:
             type: number
             example: 65
           bloodType:

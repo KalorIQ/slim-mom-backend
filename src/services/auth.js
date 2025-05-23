@@ -14,6 +14,7 @@ import { sendMail } from '../utils/sendMail.js';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import handlebars from 'handlebars';
+import { calculateCalory } from '../utils/calculateCalory.js';
 
 // eslint-disable-next-line no-undef
 const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
@@ -33,7 +34,7 @@ const createSession = () => {
 };
 
 export const registerUser = async (payload) => {
-  const { email, password } = payload;
+  const { email, password, infouser } = payload;
 
   const user = await userCollection.findOne({ email });
   if (user) {
@@ -45,7 +46,17 @@ export const registerUser = async (payload) => {
   const data = await userCollection.create({
     ...payload,
     password: hashPassword,
+    infouser: {
+      ...infouser,
+      dailyRate: calculateCalory({
+        currentWeight: infouser.currentWeight,
+        height: infouser.height,
+        age: infouser.age,
+        desireWeight: infouser.desireWeight,
+      }),
+    },
   });
+
   delete data._doc.password;
 
   return data._doc;

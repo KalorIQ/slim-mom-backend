@@ -8,7 +8,7 @@ export const registerUserSchema = Joi.object({
     currentWeight: Joi.number().required(),
     height: Joi.number().required(),
     age: Joi.number().required(),
-    desiredWeight: Joi.number().required(),
+    desireWeight: Joi.number().required(),
     bloodType: Joi.number().required(),
   }),
 });

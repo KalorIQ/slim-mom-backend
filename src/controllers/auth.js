@@ -9,18 +9,18 @@ import jwt from 'jsonwebtoken';
 import sessionCollection from '../db/models/session.js';
 import { ONE_DAY } from '../constants/user.js';
 
-import { resetPassword } from '../services/auth.js';
+// import { resetPassword } from '../services/auth.js';
 
 export const registerUserController = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, infouser } = req.body;
     const user = await getUser(email);
 
     if (user) {
       return next(createHttpError(409, 'Email in use'));
     }
 
-    const newUser = await registerUser({ name, email, password });
+    const newUser = await registerUser({ name, email, password, infouser });
 
     // eslint-disable-next-line no-undef
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
@@ -118,7 +118,7 @@ export const logoutUser = async (req, res, next) => {
     }
 
     const refreshToken = req.cookies.refreshToken;
-    const sessionId = req.cookies.sessionId;
+    // const sessionId = req.cookies.sessionId;
 
     let session;
     if (token) {

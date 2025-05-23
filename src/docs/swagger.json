@@ -599,7 +599,7 @@
                   "weight",
                   "height",
                   "age",
-                  "desiredWeight",
+                  "desireWeight",
                   "bloodType"
                 ],
                 "properties": {
@@ -615,7 +615,7 @@
                     "type": "number",
                     "example": 25
                   },
-                  "desiredWeight": {
+                  "desireWeight": {
                     "type": "number",
                     "example": 65
                   },
