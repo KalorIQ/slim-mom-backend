@@ -24,19 +24,24 @@ const setupSessionCookies = (res, session) => {
 };
 
 export const registerUserController = async (req, res, next) => {
+  let registerInfo = {};
+  if (req.body.infouser) {
+    registerInfo = req.body;
+  } else {
+    registerInfo = { name: req.body.name, email: req.body.email, password: req.body.password };
+  }
   try {
-    const { name, email, password, infouser } = req.body;
-    const existingUser = await getUser(email);
+    const existingUser = await getUser(registerInfo.email);
 
     if (existingUser) {
       return next(createHttpError(409, 'Email in use'));
     }
 
-    const newUser = await registerUser({ name, email, password, infouser });
+    const newUser = await registerUser(registerInfo);
 
     // Create session for the new user
     // We need to use the original password, not a potentially re-hashed one if loginUser hashes it.
-    const session = await loginUser({ email, password: req.body.password });
+    const session = await loginUser({ email: registerInfo.email, password: registerInfo.password });
 
     setupSessionCookies(res, session);
 

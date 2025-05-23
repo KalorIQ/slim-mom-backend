@@ -4,10 +4,7 @@ import SessionCollection from '../db/models/session.js';
 import createHttpError from 'http-errors';
 import { randomBytes } from 'crypto';
 
-import {
-  accessTokenLifetime,
-  refreshTokenLifetime,
-} from '../constants/user.js';
+import { accessTokenLifetime, refreshTokenLifetime } from '../constants/user.js';
 import jwt from 'jsonwebtoken';
 
 import { sendMail } from '../utils/sendMail.js';
@@ -43,10 +40,12 @@ export const registerUser = async (payload) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const data = await userCollection.create({
-    ...payload,
-    password: hashPassword,
-    infouser: {
+  // Handle the case where infouser is not provided
+  let userInfoData = {};
+
+  if (infouser && infouser.currentWeight && infouser.height && infouser.age && infouser.desireWeight) {
+    // If all required infouser fields are provided, calculate dailyRate
+    userInfoData = {
       ...infouser,
       dailyRate: calculateCalory({
         currentWeight: infouser.currentWeight,
@@ -54,7 +53,31 @@ export const registerUser = async (payload) => {
         age: infouser.age,
         desireWeight: infouser.desireWeight,
       }),
-    },
+    };
+  } else if (infouser) {
+    // If infouser is provided but incomplete, spread the available fields
+    userInfoData = {
+      ...infouser,
+      dailyRate: null, // Set dailyRate to null if we can't calculate it
+    };
+  } else {
+    // If infouser is not provided at all, create empty object with default values
+    userInfoData = {
+      currentWeight: null,
+      height: null,
+      age: null,
+      desireWeight: null,
+      bloodType: null,
+      dailyRate: null,
+      notAllowedProducts: null,
+      notAllowedProductsAll: null,
+    };
+  }
+
+  const data = await userCollection.create({
+    ...payload,
+    password: hashPassword,
+    infouser: userInfoData,
   });
 
   delete data._doc.password;
@@ -109,8 +132,7 @@ export const loginUser = async (payload) => {
   return sessionWithUser;
 };
 
-export const findSessionByAccessToken = (accessToken) =>
-  SessionCollection.findOne({ accessToken });
+export const findSessionByAccessToken = (accessToken) => SessionCollection.findOne({ accessToken });
 
 export const refreshSession = async ({ refreshToken, sessionId }) => {
   const oldSession = await SessionCollection.findOne({
@@ -151,8 +173,7 @@ export const refreshUser = async ({ sessionId, refreshToken }) => {
       throw createHttpError(404, 'Session not found');
     }
     // console.log('Found Session:', session);
-    const isSessionTokenExpired =
-      new Date() > new Date(session.refreshTokenValidUntil);
+    const isSessionTokenExpired = new Date() > new Date(session.refreshTokenValidUntil);
 
     if (isSessionTokenExpired) {
       throw createHttpError(401, 'Session token expired');
