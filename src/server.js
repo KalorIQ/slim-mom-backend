@@ -16,7 +16,6 @@ import { env } from './utils/env.js';
 import router from './routers/auth.js';
 
 const PORT = Number(env('PORT', '3000'));
-const ORIGIN = env('APP_VERCEL_DOMAIN');
 
 // Get the directory name
 const __filename = fileURLToPath(import.meta.url);
@@ -28,7 +27,7 @@ export const startServer = () => {
   app.use(express.json());
   app.use(
     cors({
-      origin: ['http://localhost:5173', ORIGIN],
+      origin: true,
       credentials: true,
     }),
   );
