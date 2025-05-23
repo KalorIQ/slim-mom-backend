@@ -24,7 +24,6 @@ const __dirname = path.dirname(__filename);
 export const startServer = () => {
   const app = express();
   dotenv.config();
-
   app.use(express.json());
   app.use(
     cors({

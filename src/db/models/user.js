@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema(
   {
@@ -57,7 +57,7 @@ const userSchema = new Schema(
   {
     versionKey: false,
     timestamps: true,
-  }
+  },
 );
 
 userSchema.methods.toJSON = function () {
@@ -66,6 +66,6 @@ userSchema.methods.toJSON = function () {
   return obj;
 };
 
-const userCollection = model("user", userSchema);
+const userCollection = model('user', userSchema);
 
 export default userCollection;
