@@ -1,7 +1,7 @@
 import createHttpError from 'http-errors';
 import { registerUser, getUser, loginUser, refreshUser } from '../services/auth.js';
 import sessionCollection from '../db/models/session.js';
-import { ONE_DAY } from '../constants/user.js';
+import { refreshTokenLifetime } from '../constants/user.js';
 import { sendMail } from '../utils/sendMail.js';
 import User from '../db/models/user.js';
 import fs from 'fs/promises';
@@ -15,11 +15,11 @@ import process from 'process';
 const setupSessionCookies = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
+    expires: new Date(Date.now() + refreshTokenLifetime),
   });
   res.cookie('sessionId', session._id, {
     httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
+    expires: new Date(Date.now() + refreshTokenLifetime),
   });
 };
 
@@ -81,11 +81,11 @@ export const loginUserController = async (req, res, next) => {
 
     res.cookie('refreshToken', session.refreshToken, {
       httpOnly: true,
-      expires: new Date(Date.now() + ONE_DAY),
+      expires: new Date(Date.now() + refreshTokenLifetime),
     });
     res.cookie('sessionId', session._id, {
       httpOnly: true,
-      expires: new Date(Date.now() + ONE_DAY),
+      expires: new Date(Date.now() + refreshTokenLifetime),
     });
 
     res.json({
@@ -104,11 +104,11 @@ export const loginUserController = async (req, res, next) => {
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
+    expires: new Date(Date.now() + refreshTokenLifetime),
   });
   res.cookie('sessionId', session._id, {
     httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
+    expires: new Date(Date.now() + refreshTokenLifetime),
   });
 };
 
