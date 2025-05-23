@@ -35,21 +35,6 @@ export const startServer = () => {
 
   // Serve static files from the public directory
   app.use(express.static(path.join(__dirname, '../public')));
-
-  // Log all requests with more details
-  // app.use((req, res, next) => {
-  //   console.log('Request details:');
-  //   console.log(`Method: ${req.method}`);
-  //   console.log(`URL: ${req.url}`);
-  //   console.log(`Base URL: ${req.baseUrl}`);
-  //   console.log(`Original URL: ${req.originalUrl}`);
-  //   console.log('Headers:', req.headers);
-  //   console.log('Query:', req.query);
-  //   console.log('Body:', req.body);
-  //   console.log('-------------------');
-  //   next();
-  // });
-
   // app.use(
   //   pinoHttp({
   //     transport: {
@@ -80,19 +65,6 @@ export const startServer = () => {
   app.use(errorHandler);
 
   app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-    // console.log('Available routes:');
-    // console.log('GET /');
-    // console.log('POST /api/auth/register');
-    // console.log('POST /api/auth/login');
-    // console.log('POST /api/auth/refresh');
-    // console.log('POST /api/auth/logout');
-    // console.log('POST /api/user/products');
-    // console.log('GET /api/user/products');
-    // console.log('DELETE /api/user/products/:id');
-    // console.log('GET /api/user/my-daily-calories');
-    // console.log('GET /api/user/my-daily-calory-needs');
-    // console.log('POST /api/user/daily-calory-needs');
-    // console.log('GET /api/products/searchProducts');
+    console.info(`Server is running on port ${PORT}`);
   });
 };

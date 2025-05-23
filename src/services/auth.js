@@ -169,17 +169,13 @@ export const refreshSession = async ({ refreshToken, sessionId }) => {
 
 export const refreshUser = async ({ sessionId, refreshToken }) => {
   try {
-    // console.log('In refreshUser Service sessionId', sessionId);
-    // console.log('In refreshUser Service refreshToken', refreshToken);
     const session = await SessionCollection.findOne({
       _id: sessionId,
       refreshToken,
     });
-    // console.log('In refreshUser Service session', session);
     if (!session) {
       throw createHttpError(404, 'Session not found');
     }
-    // console.log('Found Session:', session);
     const isSessionTokenExpired = new Date() > new Date(session.refreshTokenValidUntil);
 
     if (isSessionTokenExpired) {
@@ -257,14 +253,10 @@ export const resetPassword = async (payload) => {
       throw createHttpError(401, 'Invalid token');
     }
   } catch (error) {
-    console.log('error', error);
-    throw createHttpError(401, 'Invalid token');
+    throw createHttpError(401, 'Invalid token: ' + error);
   }
-  console.log('decodedToken', decodedToken);
-
   const userId = decodedToken.sub;
   const userEmail = decodedToken.email;
-
   const user = await userCollection.findOne({
     _id: userId,
     email: userEmail,

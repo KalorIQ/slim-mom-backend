@@ -15,7 +15,7 @@ export const sendMail = async (options) => {
 
   try {
     await transporter.verify();
-    console.log("SMTP connection is valid");
+    console.info("SMTP connection is valid");
   } catch (error) {
     console.error("SMTP connection error:", error);
     throw error;
@@ -23,7 +23,7 @@ export const sendMail = async (options) => {
 
   try {
     await transporter.sendMail(options);
-    console.log("Email sent successfully");
+    console.info("Email sent successfully");
   } catch (error) {
     console.error("Error sending email:", error);
     throw error;
