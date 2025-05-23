@@ -28,9 +28,9 @@ export const startServer = () => {
   app.use(express.json());
   app.use(
     cors({
-      origin: '*',
+      origin: ['http://localhost:5173', 'YOUR_OTHER_ORIGIN_HERE'], // Add your other origin here
       credentials: true,
-    })
+    }),
   );
   app.use(cookieParser());
 
@@ -38,18 +38,18 @@ export const startServer = () => {
   app.use(express.static(path.join(__dirname, '../public')));
 
   // Log all requests with more details
-  app.use((req, res, next) => {
-    console.log('Request details:');
-    console.log(`Method: ${req.method}`);
-    console.log(`URL: ${req.url}`);
-    console.log(`Base URL: ${req.baseUrl}`);
-    console.log(`Original URL: ${req.originalUrl}`);
-    console.log('Headers:', req.headers);
-    console.log('Query:', req.query);
-    console.log('Body:', req.body);
-    console.log('-------------------');
-    next();
-  });
+  // app.use((req, res, next) => {
+  //   console.log('Request details:');
+  //   console.log(`Method: ${req.method}`);
+  //   console.log(`URL: ${req.url}`);
+  //   console.log(`Base URL: ${req.baseUrl}`);
+  //   console.log(`Original URL: ${req.originalUrl}`);
+  //   console.log('Headers:', req.headers);
+  //   console.log('Query:', req.query);
+  //   console.log('Body:', req.body);
+  //   console.log('-------------------');
+  //   next();
+  // });
 
   // app.use(
   //   pinoHttp({
