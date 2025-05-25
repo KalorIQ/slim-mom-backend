@@ -43,25 +43,32 @@ export const registerUser = async (payload) => {
   // Handle the case where infouser is not provided
   let userInfoData = {};
 
-  if (infouser && infouser.currentWeight && infouser.height && infouser.age && infouser.desireWeight) {
-    // If all required infouser fields are provided, calculate dailyRate
+  // Helper function to check if a value is a valid positive number
+  const isValidNumber = (value) => {
+    return value !== null && value !== undefined && !isNaN(value) && Number(value) > 0;
+  };
+
+  // Check if all required fields are provided and are valid numbers
+  const hasCompleteValidInfo =
+    infouser &&
+    isValidNumber(infouser.currentWeight) &&
+    isValidNumber(infouser.height) &&
+    isValidNumber(infouser.age) &&
+    isValidNumber(infouser.desireWeight);
+
+  if (hasCompleteValidInfo) {
+    // If all required infouser fields are provided and valid, calculate dailyRate
     userInfoData = {
       ...infouser,
       dailyRate: calculateCalory({
-        currentWeight: infouser.currentWeight,
-        height: infouser.height,
-        age: infouser.age,
-        desireWeight: infouser.desireWeight,
+        currentWeight: Number(infouser.currentWeight),
+        height: Number(infouser.height),
+        age: Number(infouser.age),
+        desireWeight: Number(infouser.desireWeight),
       }),
     };
-  } else if (infouser) {
-    // If infouser is provided but incomplete, spread the available fields
-    userInfoData = {
-      ...infouser,
-      dailyRate: null, // Set dailyRate to null if we can't calculate it
-    };
   } else {
-    // If infouser is not provided at all, create empty object with default values
+    // If infouser is not provided, create empty object with default values
     userInfoData = {
       currentWeight: null,
       height: null,
@@ -162,17 +169,13 @@ export const refreshSession = async ({ refreshToken, sessionId }) => {
 
 export const refreshUser = async ({ sessionId, refreshToken }) => {
   try {
-    // console.log('In refreshUser Service sessionId', sessionId);
-    // console.log('In refreshUser Service refreshToken', refreshToken);
     const session = await SessionCollection.findOne({
       _id: sessionId,
       refreshToken,
     });
-    // console.log('In refreshUser Service session', session);
     if (!session) {
       throw createHttpError(404, 'Session not found');
     }
-    // console.log('Found Session:', session);
     const isSessionTokenExpired = new Date() > new Date(session.refreshTokenValidUntil);
 
     if (isSessionTokenExpired) {
@@ -250,14 +253,10 @@ export const resetPassword = async (payload) => {
       throw createHttpError(401, 'Invalid token');
     }
   } catch (error) {
-    console.log('error', error);
-    throw createHttpError(401, 'Invalid token');
+    throw createHttpError(401, 'Invalid token: ' + error);
   }
-  console.log('decodedToken', decodedToken);
-
   const userId = decodedToken.sub;
   const userEmail = decodedToken.email;
-
   const user = await userCollection.findOne({
     _id: userId,
     email: userEmail,
