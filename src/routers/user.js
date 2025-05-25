@@ -9,6 +9,9 @@ import { addMyProducts } from '../controllers/myProducts/addMyProducts.js';
 import { getMyProducts } from '../controllers/myProducts/getMyProducts.js';
 import { deleteMyProducts } from '../controllers/myProducts/deleteMyProducts.js';
 import { countCalories } from '../controllers/myProducts/countCalories.js';
+import { getWeeklyCalories } from '../controllers/myProducts/getWeeklyCalories.js';
+import { getWeightProgress } from '../controllers/myProducts/getWeightProgress.js';
+import { getUserStats } from '../controllers/myProducts/getUserStats.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import ctrlWrapper from '../utils/ctrlWrapper.js';
 import { updateInfouserController } from '../controllers/user.js';
@@ -24,6 +27,11 @@ router.post(
 router.get('/products', authenticate, ctrlWrapper(getMyProducts));
 router.delete('/products/:id', authenticate, ctrlWrapper(deleteMyProducts));
 router.get('/my-daily-calories', authenticate, ctrlWrapper(countCalories));
+
+// New analytics endpoints
+router.get('/weekly-calories', authenticate, ctrlWrapper(getWeeklyCalories));
+router.get('/weight-progress', authenticate, ctrlWrapper(getWeightProgress));
+router.get('/stats', authenticate, ctrlWrapper(getUserStats));
 
 router.get(
   '/my-daily-calory-needs',

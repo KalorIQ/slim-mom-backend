@@ -1,5 +1,6 @@
 import { MyProducts } from "../../db/models/MyProducts.model.js";
 import mongoose from "mongoose";
+import createHttpError from "http-errors";
 
 const addMyProducts = async (req, res) => {
   const { productId, productWeight, date } = req.body;

@@ -17,18 +17,22 @@ const deleteMyProducts = async (req, res) => {
   const dateFormatted = new Date(date).toISOString().split("T")[0];
 
   const deletedProduct = await MyProducts.findOneAndDelete({
-    productId: id,
+    _id: id,
     owner,
     date: dateFormatted,
   });
 
   if (!deletedProduct) {
     return res.status(404).json({
-      message: `No product found with this id (${id}) or specified date (${date})!`,
+      message: `No product found with this ID (${id}) for the specified date (${date})!`,
     });
   }
 
-  res.status(204).json({ message: "Product deleted!", deletedProduct });
+  res.status(200).json({ 
+    message: "Product deleted successfully!", 
+    productId: id,
+    deletedProduct 
+  });
 };
 
 export { deleteMyProducts };
