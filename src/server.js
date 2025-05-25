@@ -5,15 +5,12 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import authRouter from './routers/auth.js';
-import userRouter from './routers/user.js';
-import productRouter from './routers/products.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { SwaggerDocs } from './middlewares/swaggerDocs.js';
 
 import { env } from './utils/env.js';
-import router from './routers/auth.js';
+import router from './routers/index.js';
 
 const PORT = Number(env('PORT', '3000'));
 
@@ -49,14 +46,11 @@ export const startServer = () => {
     });
   });
 
-  app.use(router);
   // swagger docs
   app.use('/api-docs', SwaggerDocs());
 
-  // Mount the routers
-  app.use('/api/auth', authRouter);
-  app.use('/api/user', userRouter);
-  app.use('/api/products', productRouter);
+  // Mount the main router
+  app.use('/api', router);
 
   // handlers for 404 and error
   app.use(notFoundHandler);
