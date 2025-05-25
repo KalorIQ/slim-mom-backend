@@ -9,10 +9,17 @@ const deleteMyProducts = async (req, res) => {
     const owner = req.user._id;
 
     // Debug log'ları ekleyelim
-    console.log("Delete request received:");
+    console.log("=== DELETE REQUEST DEBUG ===");
+    console.log("- Request URL:", req.originalUrl);
+    console.log("- Request Method:", req.method);
+    console.log("- Request Headers:", JSON.stringify(req.headers, null, 2));
+    console.log("- Request Params:", JSON.stringify(req.params, null, 2));
+    console.log("- Request Query:", JSON.stringify(req.query, null, 2));
     console.log("- ID:", id);
     console.log("- Date:", date);
     console.log("- Owner:", owner);
+    console.log("- ID Type:", typeof id);
+    console.log("- Date Type:", typeof date);
 
     // Validasyonlar
     if (!date) {
@@ -61,9 +68,10 @@ const deleteMyProducts = async (req, res) => {
     });
 
     console.log("- All products for this date:", allProductsForDate.map(p => ({
-      id: p._id,
+      id: p._id.toString(),
       date: p.date,
-      productId: p.productId
+      productId: p.productId,
+      productWeight: p.productWeight
     })));
 
     // Önce ürünün var olup olmadığını kontrol edelim
@@ -109,6 +117,7 @@ const deleteMyProducts = async (req, res) => {
           productByOwner: !!productByOwner,
           actualProductDate: productById?.date,
           allProductsForDate: allProductsForDate.length,
+          allProductIds: allProductsForDate.map(p => p._id.toString()),
         }
       });
     }
@@ -124,6 +133,7 @@ const deleteMyProducts = async (req, res) => {
     });
 
     console.log("- Deleted product:", deletedProduct);
+    console.log("=== DELETE REQUEST COMPLETED ===");
 
     res.status(200).json({ 
       message: "Product deleted successfully!", 
