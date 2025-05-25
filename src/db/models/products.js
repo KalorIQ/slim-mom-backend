@@ -18,6 +18,27 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Category is required'],
     },
+    // Macro nutrients (per 100g)
+    carbohydrates: {
+      type: Number,
+      default: 0,
+    },
+    protein: {
+      type: Number,
+      default: 0,
+    },
+    fat: {
+      type: Number,
+      default: 0,
+    },
+    fiber: {
+      type: Number,
+      default: 0,
+    },
+    sugar: {
+      type: Number,
+      default: 0,
+    },
     groupBloodNotAllowed: {
       type: [Boolean],
       default: [false, false, false, false],

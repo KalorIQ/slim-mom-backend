@@ -12,6 +12,12 @@ import { countCalories } from '../controllers/myProducts/countCalories.js';
 import { getWeeklyCalories } from '../controllers/myProducts/getWeeklyCalories.js';
 import { getWeightProgress } from '../controllers/myProducts/getWeightProgress.js';
 import { getUserStats } from '../controllers/myProducts/getUserStats.js';
+import { getUserActivityStats } from '../controllers/myProducts/getUserActivityStats.js';
+import { getWeightHistory } from '../controllers/myProducts/getWeightHistory.js';
+import { getMacroBreakdown } from '../controllers/myProducts/getMacroBreakdown.js';
+import { getUserAchievements } from '../controllers/myProducts/getUserAchievements.js';
+import { getDetailedWeeklyCalories } from '../controllers/myProducts/getDetailedWeeklyCalories.js';
+import { getComprehensiveStats } from '../controllers/myProducts/getComprehensiveStats.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import ctrlWrapper from '../utils/ctrlWrapper.js';
 import { updateInfouserController } from '../controllers/user.js';
@@ -28,10 +34,18 @@ router.get('/products', authenticate, ctrlWrapper(getMyProducts));
 router.delete('/products/:id', authenticate, ctrlWrapper(deleteMyProducts));
 router.get('/my-daily-calories', authenticate, ctrlWrapper(countCalories));
 
-// New analytics endpoints
+// Analytics endpoints
 router.get('/weekly-calories', authenticate, ctrlWrapper(getWeeklyCalories));
 router.get('/weight-progress', authenticate, ctrlWrapper(getWeightProgress));
 router.get('/stats', authenticate, ctrlWrapper(getUserStats));
+
+// New advanced analytics endpoints
+router.get('/activity-stats', authenticate, ctrlWrapper(getUserActivityStats));
+router.get('/weight-history', authenticate, ctrlWrapper(getWeightHistory));
+router.get('/macro-breakdown', authenticate, ctrlWrapper(getMacroBreakdown));
+router.get('/achievements', authenticate, ctrlWrapper(getUserAchievements));
+router.get('/weekly-calories-detailed', authenticate, ctrlWrapper(getDetailedWeeklyCalories));
+router.get('/comprehensive-stats', authenticate, ctrlWrapper(getComprehensiveStats));
 
 router.get(
   '/my-daily-calory-needs',

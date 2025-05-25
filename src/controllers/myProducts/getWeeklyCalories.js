@@ -7,17 +7,12 @@ const getWeeklyCalories = async (req, res) => {
   try {
     // Get last 7 days of data
     const weeklyData = [];
-    const dates = [];
     
     for (let i = 6; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
       const dateString = date.toISOString().split('T')[0];
-      dates.push(dateString);
-    }
-
-    // Get products for each date
-    for (const dateString of dates) {
+      
       try {
         const products = await getProductsForDateService(owner, dateString);
         
@@ -42,10 +37,8 @@ const getWeeklyCalories = async (req, res) => {
       }
     }
 
-    res.status(200).json({
-      message: "Weekly calories data retrieved successfully!",
-      data: weeklyData,
-    });
+    // Frontend expects direct array, not wrapped in data object for this endpoint
+    res.status(200).json(weeklyData);
   } catch (error) {
     throw createHttpError(500, "Failed to get weekly calories data");
   }
