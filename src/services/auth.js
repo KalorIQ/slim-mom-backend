@@ -133,6 +133,8 @@ export const loginUser = async (payload) => {
       name: user.name,
       email: user.email,
       infouser: user.infouser,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     },
   };
 
